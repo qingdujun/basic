@@ -12,7 +12,7 @@ const int LISTENQ = 5;
 const int MAXBUFFSIZE = 1024;
 const int MAXLINE = 128;
 
-ssize_t reandn(int fd, void* vptr, size_t n) {
+ssize_t readn(int fd, void* vptr, size_t n) {
     ssize_t nread;
     char *ptr;
     size_t nleft = n;
@@ -78,6 +78,15 @@ ssize_t writen(int fd, void const* vptr, size_t n) {
         ptr += nwritten;
     }
     return n;
+}
+
+void sig_chld(int signo) {
+    pid_t pid;
+    int stat;
+
+    while ( (pid = waitpid(-1, &stat, WNOHANG)) > 0 )
+        ;
+    return;  //recommend
 }
 
 void str_cli(FILE* fp, int sockfd) {

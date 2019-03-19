@@ -56,6 +56,15 @@ ssize_t writen(int fd, void const* vptr, size_t n) {
     return n;
 }
 
+void sig_chld(int signo) {
+    pid_t pid;
+    int stat;
+
+    while ( (pid = waitpid(-1, &stat, WNOHANG)) > 0 )
+        printf("child pid=%d terminated\n", pid);//警告: printf为不可重入函数
+    return;  //显示`return`接受中断位置处的指令
+}
+
 void str_echo(int sockfd) {
     ssize_t n;
     char buf[MAXLINE];
@@ -88,6 +97,8 @@ int main(int argc, char* argv[]) {
     }
 
     listen(listenfd, LISTENQ);
+
+    signal(SIGCHLD, &sig_chld);
 
     for ( ; ; ) {
         clilen = sizeof(cliaddr);
