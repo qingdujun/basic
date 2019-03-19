@@ -80,23 +80,26 @@ ssize_t writen(int fd, void const* vptr, size_t n) {
     return n;
 }
 
+void exit_msg(char* msg) {
+    perror(msg);
+    exit(0);
+}
+
 void sig_chld(int signo) {
     pid_t pid;
     int stat;
 
     while ( (pid = waitpid(-1, &stat, WNOHANG)) > 0 )
-        ;
-    return;  //recommend
+        printf("child pid=%d terminated\n", pid);//警告: printf为不可重入函数
+    return;  //显示`return`接受中断位置处的指令
 }
 
 void str_cli(FILE* fp, int sockfd) {
     char send_line[MAXLINE], recv_line[MAXLINE];
     while ( fgets(send_line, MAXLINE, fp) != NULL ) {
         int n = writen(sockfd, send_line, strlen(send_line));
-        if ( readline(sockfd, recv_line, MAXLINE) == 0 ) {
-            perror("str_cli readline==0");
-            exit(0);
-        }
+        if ( readline(sockfd, recv_line, MAXLINE) == 0 )
+            exit_msg("str_cli readline==0");
         fputs(recv_line, stdout);
     }
 }
@@ -105,10 +108,8 @@ int main(int argc, char* argv[]) {
     int sockfd;
     struct sockaddr_in servaddr;
 
-    if (argc != 2) {
-        perror("argv != 2");
-        exit(0);
-    }
+    if (argc != 2)
+        exit_msg("argv != 2");
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -117,10 +118,8 @@ int main(int argc, char* argv[]) {
     servaddr.sin_port = htons(SERV_PORT);
     inet_pton(AF_INET, argv[1], &servaddr.sin_addr);
 
-    if (connect(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr)) < 0) {
-        perror("conn err");
-        exit(0);
-    }
+    if (connect(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr)) < 0)
+        exit_msg("conn err");//警告: connect请勿捕获EINTR
 
     str_cli(stdin, sockfd);
 
