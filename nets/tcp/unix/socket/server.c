@@ -102,6 +102,7 @@ int main(int argc, char* argv[]) {
     listen(listenfd, LISTENQ);
 
     signal(SIGCHLD, &sig_chld);
+    signal(SIGPIPE, SIG_IGN);
 
     for ( ; ; ) {
         clilen = sizeof(cliaddr);
