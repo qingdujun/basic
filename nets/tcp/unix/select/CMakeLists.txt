@@ -1,0 +1,5 @@
+cmake_minimum_required (VERSION 2.8)
+project (select)
+# aux_source_directory (. DIR_SRCS)
+add_executable (server select_server.c)
+add_executable (client select_client.c)
