@@ -1,0 +1,5 @@
+cmake_minimum_required (VERSION 2.8)
+project (kqueue)
+# aux_source_directory (. DIR_SRCS)
+add_executable (server kqueue_server.c)
+add_executable (client kqueue_client.c)

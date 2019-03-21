@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/qingdujun/works/workspaces/moss/nets/tcp/unix/kqueue/kqueue_server.c
+sys/socket.h
+-
+netinet/in.h
+-
+unistd.h
+-
+stdlib.h
+-
+errno.h
+-
+string.h
+-
+sys/event.h
+-
+limits.h
+-
+stdio.h
+-
+sys/stat.h
+-
+
