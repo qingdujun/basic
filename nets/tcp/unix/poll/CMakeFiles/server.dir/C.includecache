@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/qingdujun/works/workspaces/moss/nets/tcp/unix/poll/poll_server.c
+sys/socket.h
+-
+netinet/in.h
+-
+unistd.h
+-
+stdlib.h
+-
+errno.h
+-
+string.h
+-
+poll.h
+-
+limits.h
+-
+stdio.h
+-
+
