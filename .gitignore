@@ -32,6 +32,9 @@
 *.app
 
 # 2019-3-22 ainalif.org
+# CMake
 *.cmake
 CMake*
 !CMakeLists.txt
+# Mac OS X
+.DS_Store
