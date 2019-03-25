@@ -1,11 +1,14 @@
-<<<<<<< HEAD
-**A smart being gestated... via cloud computing & artificial intelligence.**
+**`Moss`是流浪地球中的智能系统，本项目作为个人云计算与人工智能尝试的基础库**
 
-1. [threadpool](./threadpool/)
-A semi-synchronous semi-asynchronous thread pool based on C++11.
+1. [pool/thread](./pool/thread)
+一个基于`C++11`开发的半同步半异步线程池。
 
 2. [designpatterns](./designpatterns/)
-Template implementation for several commonly used design patterns.
-=======
-git rm -r --cached .
->>>>>>> 118e4b6296f432ccc9e05260550baa6194a68e56
+使用模板实现了常用的设计模式。
+
+3. [nets/tcp/unix](./nets/tcp/unix)
+实现了`tcp-socket`、`select`、`poll`和`kqueue`模型。
+
+4. [nets/tcp/linux](./nets/tcp/linux)
+实现了`epoll`模型。
+
