@@ -1,3 +1,0 @@
-/Users/qingdujun/Works/workspaces/vscode/cpp/threadpool/CMakeFiles/rebuild_cache.dir
-/Users/qingdujun/Works/workspaces/vscode/cpp/threadpool/CMakeFiles/edit_cache.dir
-/Users/qingdujun/Works/workspaces/vscode/cpp/threadpool/CMakeFiles/test.dir
