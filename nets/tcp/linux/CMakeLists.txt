@@ -1,0 +1,5 @@
+cmake_minimum_required (VERSION 2.8)
+project (epoll)
+# aux_source_directory (. DIR_SRCS)
+add_executable (server epoll_server.c)
+add_executable (client epoll_client.c)

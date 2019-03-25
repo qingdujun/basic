@@ -4,16 +4,15 @@
 #include <stdlib.h>       //exit(0)
 #include <errno.h>
 #include <string.h>       //bzero
-#include <sys/event.h>    //kevent
+#include <sys/epoll.h>    //epoll
 #include <limits.h>       //OPEN_MAX
 #include <stdio.h>
-#include <sys/stat.h>     //fstat
 
 const int SERV_PORT = 9527;
 const int LISTENQ = 5;
 const int MAXBUFSIZE = 1024;
-const int INFTIM = -1; //TIMEOUT: 据说INFTIM被定义在<poll.h>中，但是没找到，<sys/stropts.h>中也没有
-
+const int OPEN_MAX = 10240;
+const int INFTIM = -1; //TIMEOUT
 
 void exit_msg(char* msg) {
     perror(msg);
@@ -39,13 +38,11 @@ ssize_t writen(int fd, void const* vptr, size_t n) {
 }
 
 int main(int argc, char* argv[]) {
-    int kq, i, nev, n, nevents, listenfd, connfd, sockfd;
+    int epollfd, i, nev, n, maxevents, listenfd, connfd, sockfd;
     char buf[MAXBUFSIZE];
     socklen_t clilen;
     struct sockaddr_in cliaddr, servaddr;
-    struct kevent ev, kev[OPEN_MAX];//#define OPEN_MAX 10240 (Mac OS X)
-    struct timespec ts;
-    struct stat st;
+    struct epoll_event ev, events[OPEN_MAX];//#define OPEN_MAX 10240 (Mac OS X)
 
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -59,31 +56,32 @@ int main(int argc, char* argv[]) {
 
     listen(listenfd, LISTENQ);
 
-    EV_SET(&ev, listenfd, EVFILT_READ, EV_ADD, 0, 0, NULL);
-    kq = kqueue();
-    ts.tv_sec = ts.tv_nsec = 0;
+    epollfd = epoll_create(OPEN_MAX);
+    
+    ev.data.fd = listenfd;
+    ev.events = EPOLLIN | EPOLLET;// EPOLLET(边缘触发，一次), EPOLLLT(水平触发，多次)
     //1、注册所关注的事件
-    kevent(kq, &ev, 1, NULL, 0, &ts);  //&ts=0，非阻塞
-    nevents = 1;
+    epoll_ctl(epollfd, EPOLL_CTL_ADD, listenfd, &ev); 
+    maxevents = 1;
     for ( ; ; ) {
         //2、确定是否有所关注的事件发生
-        nev = kevent(kq, NULL, 0, kev, nevents, NULL); //timeout=NULL表示阻塞
+        nev = epoll_wait(epollfd, events, maxevents, INFTIM); 
         for (i = 0; i < nev; ++i) {
-            if (kev[i].ident == listenfd && nevents < OPEN_MAX) {
+            if (events[i].data.fd == listenfd && maxevents < OPEN_MAX) {
                 clilen = sizeof(cliaddr);
                 connfd = accept(listenfd, (struct sockaddr*)&cliaddr, &clilen);
-                EV_SET(&ev, connfd, EVFILT_READ, EV_ADD, 0, 0, NULL);
-                kevent(kq, &ev, 1, NULL, 0, &ts);
-                ++nevents;
+                ev.data.fd = connfd;
+                ev.events = EPOLLIN | EPOLLET;
+                epoll_ctl(epollfd, EPOLL_CTL_ADD, connfd, &ev); 
+                ++maxevents;
             } 
             else {
-                sockfd = kev[i].ident;
+                sockfd = events[i].data.fd;
                 if ( (n = read(sockfd, buf, MAXBUFSIZE)) < 0 ) {
                     if (errno == ECONNRESET) {
                         close(sockfd);
-                        EV_SET(&ev, sockfd, 0, EV_DELETE, 0, 0, NULL); //DELETE    
-                        kevent(kq, &ev, 1, NULL, 0, &ts);
-                        --nevents;
+                        epoll_ctl(epollfd, EPOLL_CTL_DEL, sockfd, &ev);  //DELETE
+                        --maxevents;
                     }
                     else {
                         exit_msg("read error");
@@ -91,9 +89,8 @@ int main(int argc, char* argv[]) {
                 } 
                 else if (n == 0) {
                     close(sockfd);
-                    EV_SET(&ev, sockfd, 0, EV_DELETE, 0, 0, NULL); //DELETE    
-                    kevent(kq, &ev, 1, NULL, 0, &ts);
-                    --nevents;
+                    epoll_ctl(epollfd, EPOLL_CTL_DEL, sockfd, &ev);  //DELETE
+                    --maxevents;
                 }
                 else {
                     writen(sockfd, buf, n);//DIY: writen = write + while

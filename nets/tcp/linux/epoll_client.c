@@ -5,7 +5,7 @@
 #include <stdlib.h>       //exit(0)
 #include <errno.h>
 #include <sys/types.h>
-#include <sys/event.h>    //kqueue
+#include <sys/epoll.h>    //epoll
 #include <sys/time.h>  
 #include <string.h>       //bzero
 #include <stdio.h>
@@ -14,6 +14,8 @@
 const int SERV_PORT = 9527;
 const int LISTENQ = 5;
 const int MAXBUFSIZE = 1024;
+const int OPEN_MAX = 10240;
+const int INFTIM = -1; //TIMEOUT
 
 void exit_msg(char* msg) {
     perror(msg);
@@ -39,27 +41,28 @@ ssize_t writen(int fd, void const* vptr, size_t n) {
 }
 
 void str_cli(FILE* fp, int sockfd) {
-    int kq, i, n, nev, stdineof=0, isfile;
+    int epollfd, i, n, nev, maxevents, stdineof=0, isfile;
     char buf[MAXBUFSIZE];
-    struct kevent kev[2];
-    struct timespec ts;
+    struct epoll_event ev, events[2];
     struct stat st;
 
     isfile = ((fstat(fileno(fp), &st) == 0) && (st.st_mode & S_IFMT) == S_IFREG);
     
-    EV_SET(&kev[0], fileno(fp), EVFILT_READ, EV_ADD, 0, 0, NULL);
-    EV_SET(&kev[1], sockfd, EVFILT_READ, EV_ADD, 0, 0, NULL);
+    epollfd = epoll_create(2);
 
-    kq = kqueue();
-    ts.tv_sec = ts.tv_nsec = 0;
-    //1、注册所关注的事件
-    kevent(kq, kev, 2, NULL, 0, &ts);  //&ts=0，非阻塞
+    ev.data.fd = fileno(fp);
+    ev.events = EPOLLIN | EPOLLET;// EPOLLET(边缘触发，一次), EPOLLLT(水平触发，多次)
+    epoll_ctl(epollfd, EPOLL_CTL_ADD, fileno(fp), &ev); 
 
+    ev.data.fd = sockfd;
+    epoll_ctl(epollfd, EPOLL_CTL_ADD, sockfd, &ev); 
+    
+    maxevents = 2;
     for ( ; ; ) {
         //2、确定是否有所关注的事件发生
-        nev = kevent(kq, NULL, 0, kev/*out*/, 2, NULL); //timeout=NULL表示阻塞
+        nev = epoll_wait(epollfd, events, maxevents, INFTIM);
         for (i = 0; i < nev; ++i) {
-            if (kev[i].ident == sockfd) {
+            if (events[i].data.fd == sockfd) {
                 if ( (n = read(sockfd, buf, MAXBUFSIZE)) == 0 ) {
                     if (stdineof == 1) 
                         return;
@@ -68,16 +71,16 @@ void str_cli(FILE* fp, int sockfd) {
                 }
                 write(fileno(stdout), buf, n); //stdout使用write即可，不必writen
             }
-            if (kev[i].ident == fileno(fp)) {
+            if (events[i].data.fd == fileno(fp)) {
                 n = read(fileno(fp), buf, MAXBUFSIZE);
                 if (n > 0)
                     writen(sockfd, buf, n);
-                if (n == 0 || (isfile && n == kev[i].data)) {
+                if (n == 0 || (isfile && n == events[i].data.u32)) {
                     stdineof = 1;
                     shutdown(sockfd, SHUT_WR);
-                    //3、注册kevent，DELETE事件
-                    kev[i].flags = EV_DELETE;            
-                    kevent(kq, &kev[i], 1, NULL, 0, &ts);//(&kev[i], 1)合起来，表示的也就是key[i]本身
+                    //3、DELETE事件
+                    epoll_ctl(epollfd, EPOLL_CTL_DEL, sockfd, &ev);  //DELETE
+                    --maxevents;
                 }
             }
         }
