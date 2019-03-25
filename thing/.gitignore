@@ -30,6 +30,7 @@
 *.exe
 *.out
 *.app
+<<<<<<< HEAD
 
 # 2019-3-22 ainalif.org
 # CMake
@@ -38,3 +39,5 @@ CMake*
 !CMakeLists.txt
 # Mac OS X
 .DS_Store
+=======
+>>>>>>> 118e4b6296f432ccc9e05260550baa6194a68e56

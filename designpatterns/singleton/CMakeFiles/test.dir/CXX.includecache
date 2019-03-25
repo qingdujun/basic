@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/qingdujun/works/workspaces/moss/designpatterns/singleton/singleton.hpp
+utility
+-
+
+/Users/qingdujun/works/workspaces/moss/designpatterns/singleton/test.cc
+iostream
+-
+string
+-
+singleton.hpp
+/Users/qingdujun/works/workspaces/moss/designpatterns/singleton/singleton.hpp
+

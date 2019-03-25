@@ -1,0 +1,4 @@
+/Users/qingdujun/works/workspaces/moss/nets/tcp/unix/kqueue/CMakeFiles/rebuild_cache.dir
+/Users/qingdujun/works/workspaces/moss/nets/tcp/unix/kqueue/CMakeFiles/edit_cache.dir
+/Users/qingdujun/works/workspaces/moss/nets/tcp/unix/kqueue/CMakeFiles/client.dir
+/Users/qingdujun/works/workspaces/moss/nets/tcp/unix/kqueue/CMakeFiles/server.dir

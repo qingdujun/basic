@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/qingdujun/works/workspaces/moss/nets/tcp/unix/socket/server.cc
+sys/socket.h
+-
+netinet/in.h
+-
+unistd.h
+-
+stdlib.h
+-
+errno.h
+-
+

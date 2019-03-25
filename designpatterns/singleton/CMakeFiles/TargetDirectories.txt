@@ -1,0 +1,3 @@
+/Users/qingdujun/works/workspaces/moss/designpatterns/singleton/CMakeFiles/rebuild_cache.dir
+/Users/qingdujun/works/workspaces/moss/designpatterns/singleton/CMakeFiles/edit_cache.dir
+/Users/qingdujun/works/workspaces/moss/designpatterns/singleton/CMakeFiles/test.dir
