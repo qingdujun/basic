@@ -38,8 +38,10 @@ public:
         return ptr_;
     }
 
-    void release() {
+    T* release() {
+        T* ret = ptr_;
         ptr_ = nullptr;
+        return ret;
     }
 
     void exchange_with(Unique_ptr<T>& ref) {
