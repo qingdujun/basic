@@ -1,0 +1,25 @@
+# 2019-05-25 by Manlou Hua(hua7th@gmail.com)
+#
+cmake_minimum_required (VERSION 2.8)
+project (http-proxy)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+#set(CMAKE_CXX_FLAGS "-lboost_system") 
+#set(CMAKE_CXX_FLAGS "-lboost_thread-mt") 
+
+#find_package(Boost REQUIRED COMPONENTS serialization system filesystem program_options thread)
+#if(Boost_FOUND)
+#    include_directories(${Boost_INCLUDE_DIRS})
+#    link_directories(${Boost_LIBRARY_DIRS})
+#    message(Boost_LIBRARY_DIRS = ${Boost_LIBRARY_DIRS})
+#    message(Boost_THREAD_LIBRARY = ${Boost_THREAD_LIBRARY})
+#    add_definitions(-DBOOST_ALL_DYN_LINK)
+#else()
+#    message(err: Boost not found)
+#endif()
+
+aux_source_directory (. DIR_SRCS)
+add_executable (client ${DIR_SRCS})
+target_link_libraries(client boost_thread-mt)
