@@ -1,4 +1,4 @@
-**`Moss`是流浪地球中的智能系统，本项目作为个人云计算与人工智能尝试的基础库**
+**基础库**
 
 - [pool/thread](./pool/thread)
 一个基于`C++11`开发的半同步半异步线程池。
@@ -11,4 +11,6 @@
 
 - [nets/tcp/linux](./nets/tcp/linux)
 实现了`epoll`模型。
+
+- httpserver 是一个c++11的服务器
 
