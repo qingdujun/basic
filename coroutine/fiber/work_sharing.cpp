@@ -17,7 +17,6 @@
 #include <boost/assert.hpp>
 
 #include <boost/fiber/all.hpp>
-
 #include <boost/fiber/detail/thread_barrier.hpp>
 
 static std::size_t fiber_count{ 0 };

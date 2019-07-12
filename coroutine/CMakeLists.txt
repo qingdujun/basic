@@ -1,20 +1,16 @@
-# 2019-05-29 by Manlou Hua(hua7th@gmail.com)
+# 2019-07-12 by Web Surfing(qingdujun@outlook.com)
 #
 cmake_minimum_required (VERSION 2.8)
-project (simple-fiber)
+project (coroutine-example)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(Boost REQUIRED COMPONENTS context fiber)
+find_package(Boost REQUIRED COMPONENTS context coroutine)
 
 if(Boost_FOUND)
-    aux_source_directory (. DIR_SRCS)
-    add_executable (simple ${DIR_SRCS})
-    target_link_libraries(simple Boost::fiber Boost::context)
+    add_executable (example coroutine2-example.cpp)
+    target_link_libraries(example Boost::coroutine Boost::context)
 else()
-    message(err: Boost fiber not found)
+    message(err: Boost coroutine not found)
 endif()
-
-
-

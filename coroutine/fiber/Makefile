@@ -48,10 +48,10 @@ RM = /usr/local/Cellar/cmake/3.14.0/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/qingdujun/Work.localized/haha/basic/coroutine
+CMAKE_SOURCE_DIR = /Users/qingdujun/Work.localized/haha/basic/coroutine/fiber
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/qingdujun/Work.localized/haha/basic/coroutine
+CMAKE_BINARY_DIR = /Users/qingdujun/Work.localized/haha/basic/coroutine/fiber
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/qingdujun/Work.localized/haha/basic/coroutine/CMakeFiles /Users/qingdujun/Work.localized/haha/basic/coroutine/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/qingdujun/Work.localized/haha/basic/coroutine/fiber/CMakeFiles /Users/qingdujun/Work.localized/haha/basic/coroutine/fiber/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/qingdujun/Work.localized/haha/basic/coroutine/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/qingdujun/Work.localized/haha/basic/coroutine/fiber/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -123,32 +123,32 @@ example/fast:
 	$(MAKE) -f CMakeFiles/example.dir/build.make CMakeFiles/example.dir/build
 .PHONY : example/fast
 
-coroutine2-example.o: coroutine2-example.cpp.o
+fiber-example.o: fiber-example.cpp.o
 
-.PHONY : coroutine2-example.o
+.PHONY : fiber-example.o
 
 # target to build an object file
-coroutine2-example.cpp.o:
-	$(MAKE) -f CMakeFiles/example.dir/build.make CMakeFiles/example.dir/coroutine2-example.cpp.o
-.PHONY : coroutine2-example.cpp.o
+fiber-example.cpp.o:
+	$(MAKE) -f CMakeFiles/example.dir/build.make CMakeFiles/example.dir/fiber-example.cpp.o
+.PHONY : fiber-example.cpp.o
 
-coroutine2-example.i: coroutine2-example.cpp.i
+fiber-example.i: fiber-example.cpp.i
 
-.PHONY : coroutine2-example.i
+.PHONY : fiber-example.i
 
 # target to preprocess a source file
-coroutine2-example.cpp.i:
-	$(MAKE) -f CMakeFiles/example.dir/build.make CMakeFiles/example.dir/coroutine2-example.cpp.i
-.PHONY : coroutine2-example.cpp.i
+fiber-example.cpp.i:
+	$(MAKE) -f CMakeFiles/example.dir/build.make CMakeFiles/example.dir/fiber-example.cpp.i
+.PHONY : fiber-example.cpp.i
 
-coroutine2-example.s: coroutine2-example.cpp.s
+fiber-example.s: fiber-example.cpp.s
 
-.PHONY : coroutine2-example.s
+.PHONY : fiber-example.s
 
 # target to generate assembly for a file
-coroutine2-example.cpp.s:
-	$(MAKE) -f CMakeFiles/example.dir/build.make CMakeFiles/example.dir/coroutine2-example.cpp.s
-.PHONY : coroutine2-example.cpp.s
+fiber-example.cpp.s:
+	$(MAKE) -f CMakeFiles/example.dir/build.make CMakeFiles/example.dir/fiber-example.cpp.s
+.PHONY : fiber-example.cpp.s
 
 # Help Target
 help:
@@ -159,9 +159,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... example"
-	@echo "... coroutine2-example.o"
-	@echo "... coroutine2-example.i"
-	@echo "... coroutine2-example.s"
+	@echo "... fiber-example.o"
+	@echo "... fiber-example.i"
+	@echo "... fiber-example.s"
 .PHONY : help
 
 
