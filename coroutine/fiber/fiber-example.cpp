@@ -19,13 +19,9 @@ void bar(boost::fibers::buffered_channel<std::string>& channel) {
 } 
 
 int main(int argc, char const *argv[]) {
-    boost::fibers::buffered_channel<std::string> channel(2);
-    boost::fibers::fiber fb1(std::bind(foo, std::ref(channel)));
+    boost::fibers::buffered_channel<std::string> channel(4);
+    boost::fibers::fiber fb1(foo, std::ref(channel));
     boost::fibers::fiber fb2(std::bind(bar, std::ref(channel)));
-
-    for (int i = 0; i < 50; ++i) {
-        std::cout <<"aaaaa"<< std::endl;
-    }
 
     fb1.join();
     fb2.join();
